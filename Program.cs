@@ -4,10 +4,11 @@
     internal class Program
     {
         static double balance = 0.0;
+        static int userData = 0;
+       
         static void Main(string[] args)
         {
             int pin = 1111;
-            int userData = 0;
             int userPin = 0;
             int attempts = 3;
 
@@ -38,41 +39,16 @@
 
                 if (userAction == 1)
                 {
-                    Console.WriteLine("\nADD CURRENCY");
-                    Console.Write("\nAdd Amount: ");
-                    double addAmount = Convert.ToDouble(Console.ReadLine());
-
-                    balance += addAmount;
-                    Console.WriteLine($"Your new Balance is: {balance} \n-------------------------------------------");
-
+                    CashIn();
                 }
                 else if (userAction == 2)
                 {
-                    Console.WriteLine("\nCASH OUT");
-                    Console.Write("\nAmount to withdraw: ");
-                    double removeAmount = Convert.ToDouble(Console.ReadLine());
-
-                    if (balance >= removeAmount)
-                    {
-                        balance -= removeAmount;
-                        Console.WriteLine($"Your new Balance is: {balance} \n-------------------------------------------");
-                    }
-                    else
-                    {
-                        Console.WriteLine("ERROR, Insufficient Balance \n-------------------------------------------");
-                    }
-
+                    CashOut();
                 }
                 else if (userAction == 3)
                 {
-                    Console.WriteLine("\nBUY DATA\n");
-
-                    string[] loads = new string[] { "1) GigaChad30 (500mb)", "2) GigaChad49 (1000mb)", "3) GigaChad99 (3000mb)", "4) GigaChad149 (6000mb)", "5) GigaChad199 (12000mb)", "0) Return" };
-
-                    foreach (var load in loads)
-                    {
-                        Console.WriteLine(load);
-                    }
+                    DisplayDataMenu();
+                    
                     Console.Write("\nEnter Number: ");
                     int userNumber = Convert.ToInt16(Console.ReadLine());
 
@@ -157,14 +133,11 @@
                 }
                 else if (userAction == 4)
                 {
-                    Console.WriteLine("-------------------------------------------");
-                    Console.WriteLine("\nYour Balance:");
-                    Console.WriteLine($"\nBalance: P{balance}");
-                    Console.WriteLine($"Data: {userData}mb \n-------------------------------------------");
-
+                    DisplayBalance();
                 }
                 else if (userAction == 0)
                 {
+                    Console.WriteLine("Thank you for using this system. Exiting...");
                     break;
 
                 }
@@ -181,13 +154,55 @@
             Console.WriteLine($"BAL: {balance}");
             Console.WriteLine("\n1) Add Currency \n2) CASHOUT \n3) Buy DATA \n4) Balance \n0) EXIT");
         }
-
         static int GetUserInput()
         {
             Console.Write("\nEnter Action: ");
             int userInput = Convert.ToInt16(Console.ReadLine());
 
             return userInput;
+        }
+        static void CashIn()
+        {
+            Console.WriteLine("\nADD CURRENCY");
+            Console.Write("\nAdd Amount: ");
+            double addAmount = Convert.ToDouble(Console.ReadLine());
+
+            balance += addAmount;
+            Console.WriteLine($"Your new Balance is: {balance} \n-------------------------------------------");
+        }
+        static void CashOut()
+        {
+            Console.WriteLine("\nCASH OUT");
+            Console.Write("\nAmount to withdraw: ");
+            double removeAmount = Convert.ToDouble(Console.ReadLine());
+
+            if (balance >= removeAmount)
+            {
+                balance -= removeAmount;
+                Console.WriteLine($"Your new Balance is: {balance} \n-------------------------------------------");
+            }
+            else
+            {
+                Console.WriteLine("ERROR, Insufficient Balance \n-------------------------------------------");
+            }
+        }
+        static void DisplayDataMenu()
+        {
+            Console.WriteLine("\nBUY DATA\n");
+
+            string[] loads = new string[] { "1) GigaChad30 (500mb)", "2) GigaChad49 (1000mb)", "3) GigaChad99 (3000mb)", "4) GigaChad149 (6000mb)", "5) GigaChad199 (12000mb)", "0) Return" };
+
+            foreach (var load in loads)
+            {
+                Console.WriteLine(load);
+            }
+        }
+        static void DisplayBalance()
+        {
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("\nYour Balance:");
+            Console.WriteLine($"\nBalance: P{balance}");
+            Console.WriteLine($"Data: {userData}mb \n-------------------------------------------");
         }
     }
 }
