@@ -24,13 +24,9 @@
                     Console.WriteLine($"{attempts} attemps remaining.\n");
                 }
 
-                if (attempts == 0)
-                {
-                    Console.WriteLine("Maximum attempts reached. ACCESS DENIED.");
-                    return;
-                }
-
             } while (userPin != pin && attempts > 0);
+
+            Console.WriteLine("Login Successful");
 
             while (true)
             {
@@ -73,8 +69,6 @@
                             break;
                         default:
                             Console.WriteLine("Invalid Action.");
-                            Console.WriteLine("-------------------------------------------");
-
                             break;
                     }
 
@@ -97,7 +91,8 @@
         }
         static void DisplayMenu()
         {
-            Console.WriteLine("\nWelcome");
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("WELCOME");
             Console.WriteLine($"BAL: {balance}");
             Console.WriteLine("\n1) Add Currency \n2) CASHOUT \n3) Buy DATA \n4) Balance \n0) EXIT");
         }
@@ -111,29 +106,26 @@
         static void CashIn()
         {
             Console.WriteLine("\nADD CURRENCY");
-            Console.Write("\nAdd Amount: ");
+            Console.Write("[Amount]: ");
             double addAmount = Convert.ToDouble(Console.ReadLine());
 
             balance += addAmount;
             Console.WriteLine($"Your new Balance is: {balance}");
-            Console.WriteLine("-------------------------------------------");
         }
         static void CashOut()
         {
             Console.WriteLine("\nCASH OUT");
-            Console.Write("\nAmount to withdraw: ");
+            Console.Write("[Amount]: ");
             double removeAmount = Convert.ToDouble(Console.ReadLine());
 
             if (balance >= removeAmount)
             {
                 balance -= removeAmount;
                 Console.WriteLine($"Your new Balance is: {balance}");
-                Console.WriteLine("-------------------------------------------");
             }
             else
             {
                 Console.WriteLine("ERROR, Insufficient Balance");
-                Console.WriteLine("-------------------------------------------");
             }
         }
         static void DisplayDataMenu()
@@ -155,7 +147,6 @@
                 {
                     Console.WriteLine("\n500mb Data");
                     Console.WriteLine("Purchase Complete.");
-                    Console.WriteLine("-------------------------------------------");
 
                     balance -= 30;
                     userData += 500;
@@ -163,7 +154,6 @@
                 else
                 {
                     Console.WriteLine("Insufficient Balance.");
-                    Console.WriteLine("-------------------------------------------");
                 }
             }
             else if (action == 2)
@@ -172,7 +162,6 @@
                 {
                     Console.WriteLine("\n1000mb Data");
                     Console.WriteLine("Purchase Complete.");
-                    Console.WriteLine("-------------------------------------------");
 
                     balance -= 49;
                     userData += 1000;
@@ -180,7 +169,6 @@
                 else
                 {
                     Console.WriteLine("Insufficient Balance.");
-                    Console.WriteLine("-------------------------------------------");
                 }
             }
             else if (action == 3)
@@ -189,7 +177,6 @@
                 {
                     Console.WriteLine("\n3000mb Data");
                     Console.WriteLine("Purchase Complete.");
-                    Console.WriteLine("-------------------------------------------");
 
                     balance -= 99;
                     userData += 3000;
@@ -198,7 +185,6 @@
                 else
                 {
                     Console.WriteLine("Insufficient Balance.");
-                    Console.WriteLine("-------------------------------------------");
 
                 }
             }
@@ -208,7 +194,6 @@
                 {
                     Console.WriteLine("\n6000mb Data");
                     Console.WriteLine("Purchase Complete.");
-                    Console.WriteLine("-------------------------------------------");
 
                     balance -= 149;
                     userData += 6000;
@@ -216,7 +201,6 @@
                 else
                 {
                     Console.WriteLine("Insufficient Balance.");
-                    Console.WriteLine("-------------------------------------------");
 
                 }
             }
@@ -226,7 +210,6 @@
                 {
                     Console.WriteLine("\n12000mb Data");
                     Console.WriteLine("Purchase Complete.");
-                    Console.WriteLine("-------------------------------------------");
 
                     balance -= 199;
                     userData += 12000;
@@ -234,17 +217,15 @@
                 else
                 {
                     Console.WriteLine("Insufficient Balance.");
-                    Console.WriteLine("-------------------------------------------");
                 }
             }
         }
         static void DisplayBalance()
         {
             Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("\nYour Balance:");
+            Console.WriteLine("Your Balance:");
             Console.WriteLine($"\nBalance: P{balance}");
             Console.WriteLine($"Data: {userData}mb");
-            Console.WriteLine("-------------------------------------------");
         }
     }
 }
