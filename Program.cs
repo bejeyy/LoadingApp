@@ -1,4 +1,5 @@
-﻿namespace ConsoleApp1
+﻿
+namespace ConsoleApp1
 
 {
     internal class Program
@@ -9,8 +10,8 @@
         static void Main(string[] args)
         {
             int pin = 1111;
-            int userPin = 0;
             int attempts = 3;
+            int userPin = 0;
 
             do
             {
@@ -21,7 +22,13 @@
                 {
                     Console.WriteLine("WRONG PIN. Try again");
                     attempts--;
-                    Console.WriteLine($"{attempts} attemps remaining.\n");
+                    Console.WriteLine($"{attempts} attempts remaining.\n");
+                }
+
+                if (attempts == 0)
+                {
+                    Console.WriteLine("Maximum attempts reached. ACCESS DENIED");
+                    return;
                 }
 
             } while (userPin != pin && attempts > 0);
