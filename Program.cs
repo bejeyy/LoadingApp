@@ -1,16 +1,13 @@
-﻿
+﻿using Load_BusinessDataLogic;
+
 namespace ConsoleApp1
 
 {
     internal class Program
     {
-        static double balance = 0.0;
-        static int userData = 0;
-
         static void Main(string[] args)
         {
-            int pin = 1111;
-            int attempts = 3;
+
             int userPin = 0;
 
             do
@@ -18,20 +15,12 @@ namespace ConsoleApp1
                 Console.Write("Enter PIN: ");
                 userPin = Convert.ToInt16(Console.ReadLine());
 
-                if (userPin != pin)
+                if (!LoadProcess.PinVerification(userPin))
                 {
-                    Console.WriteLine("WRONG PIN. Try again");
-                    attempts--;
-                    Console.WriteLine($"{attempts} attempts remaining.\n");
+                    Console.WriteLine("WRONG PIN. Try again.\n");
                 }
 
-                if (attempts == 0)
-                {
-                    Console.WriteLine("Maximum attempts reached. ACCESS DENIED");
-                    return;
-                }
-
-            } while (userPin != pin && attempts > 0);
+            } while (!LoadProcess.PinVerification(userPin));
 
             Console.WriteLine("Login Successful");
 
@@ -53,9 +42,9 @@ namespace ConsoleApp1
                     DisplayDataMenu();
 
                     Console.Write("\nEnter Number: ");
-                    int actionInput = Convert.ToInt16(Console.ReadLine());
+                    int dataChoice = Convert.ToInt16(Console.ReadLine());
 
-                    switch (actionInput)
+                    switch (dataChoice)
                     {
                         case 1:
                             BuyingData(1);
@@ -100,7 +89,7 @@ namespace ConsoleApp1
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("WELCOME");
-            Console.WriteLine($"BAL: {balance}");
+            Console.WriteLine($"BAL: {LoadProcess.balance}");
             Console.WriteLine("\n1) Add Currency \n2) CASHOUT \n3) Buy DATA \n4) Balance \n0) EXIT");
         }
         static int GetUserInput()
@@ -116,8 +105,8 @@ namespace ConsoleApp1
             Console.Write("[Amount]: ");
             double addAmount = Convert.ToDouble(Console.ReadLine());
 
-            balance += addAmount;
-            Console.WriteLine($"Your new Balance is: {balance}");
+            LoadProcess.UpdateCurrency(1, addAmount);
+            Console.WriteLine($"Your new Balance is: {LoadProcess.balance}");
         }
         static void CashOut()
         {
@@ -125,10 +114,10 @@ namespace ConsoleApp1
             Console.Write("[Amount]: ");
             double removeAmount = Convert.ToDouble(Console.ReadLine());
 
-            if (balance >= removeAmount)
+            if (LoadProcess.CheckAmount(removeAmount))
             {
-                balance -= removeAmount;
-                Console.WriteLine($"Your new Balance is: {balance}");
+                LoadProcess.UpdateCurrency(2, removeAmount);
+                Console.WriteLine($"Your new Balance is: {LoadProcess.balance}");
             }
             else
             {
@@ -148,91 +137,43 @@ namespace ConsoleApp1
         }
         static void BuyingData(int action)
         {
-            if (action == 1)
+            if (LoadProcess.BuyingDataProcess(action))
             {
-                if (balance >= 30)
+                switch (action)
                 {
-                    Console.WriteLine("\n500mb Data");
-                    Console.WriteLine("Purchase Complete.");
-
-                    balance -= 30;
-                    userData += 500;
-                }
-                else
-                {
-                    Console.WriteLine("Insufficient Balance.");
+                    case 1:
+                        Console.WriteLine("500mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        break;
+                    case 2:
+                        Console.WriteLine("1000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        break;
+                    case 3:
+                        Console.WriteLine("3000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        break;
+                    case 4:
+                        Console.WriteLine("6000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        break;
+                    case 5:
+                        Console.WriteLine("10000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        break;
                 }
             }
-            else if (action == 2)
+            else
             {
-                if (balance >= 49)
-                {
-                    Console.WriteLine("\n1000mb Data");
-                    Console.WriteLine("Purchase Complete.");
-
-                    balance -= 49;
-                    userData += 1000;
-                }
-                else
-                {
-                    Console.WriteLine("Insufficient Balance.");
-                }
-            }
-            else if (action == 3)
-            {
-                if (balance >= 99)
-                {
-                    Console.WriteLine("\n3000mb Data");
-                    Console.WriteLine("Purchase Complete.");
-
-                    balance -= 99;
-                    userData += 3000;
-
-                }
-                else
-                {
-                    Console.WriteLine("Insufficient Balance.");
-
-                }
-            }
-            else if (action == 4)
-            {
-                if (balance >= 149)
-                {
-                    Console.WriteLine("\n6000mb Data");
-                    Console.WriteLine("Purchase Complete.");
-
-                    balance -= 149;
-                    userData += 6000;
-                }
-                else
-                {
-                    Console.WriteLine("Insufficient Balance.");
-
-                }
-            }
-            else if (action == 5)
-            {
-                if (balance >= 199)
-                {
-                    Console.WriteLine("\n12000mb Data");
-                    Console.WriteLine("Purchase Complete.");
-
-                    balance -= 199;
-                    userData += 12000;
-                }
-                else
-                {
-                    Console.WriteLine("Insufficient Balance.");
-                }
+                Console.WriteLine("Balance is Insufficient.");
             }
         }
         static void DisplayBalance()
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Your Balance:");
-            Console.WriteLine($"\nBalance: P{balance}");
-            Console.WriteLine($"Data: {userData}mb");
+            Console.WriteLine($"\nBalance: P{LoadProcess.balance}");
+            Console.WriteLine($"Data: {LoadProcess.userData}mb");
         }
     }
 }
