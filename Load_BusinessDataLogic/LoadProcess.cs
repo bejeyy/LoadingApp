@@ -16,7 +16,6 @@ namespace Load_BusinessDataLogic
         {
             return userPin == pin;
         }
-
         public static bool UpdateCurrency(int userInput, double amount)
         {
             if (userInput == 1)
@@ -34,7 +33,7 @@ namespace Load_BusinessDataLogic
 
         public static bool CheckAmount(double amount)
         {
-            return amount <= balance;
+            return amount > 0 && amount <= balance;
         }
         public static bool BuyingDataProcess(int action)
         {
@@ -87,12 +86,21 @@ namespace Load_BusinessDataLogic
         }
         public static bool NumberConfirmation(string num)
         {
-            if (num.Length == 11)
+            string numbersAllowed = "0123456789";
+
+            if (num.Length != 11)
             {
-                int.TryParse(num, out int number);
-                return true;
+                return false;
             }
-            return false;
+
+            foreach (char c in num)
+            {
+                if (!numbersAllowed.Contains(c))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

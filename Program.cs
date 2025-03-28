@@ -10,6 +10,8 @@ namespace ConsoleApp1
 
             int userPin = 0;
 
+            Console.WriteLine("Log-in");
+
             do
             {
                 Console.Write("Enter PIN: ");
@@ -119,14 +121,14 @@ namespace ConsoleApp1
 
                 if (!LoadProcess.NumberConfirmation(userNumber))
                 {
-                    Console.WriteLine("ERROR: Please enter a valid number.");
+                    Console.WriteLine("ERROR: Please enter a valid 11 digits number.");
                 }
 
             } while (!LoadProcess.NumberConfirmation(userNumber));
 
             Console.Write("[Amount to Send]: ");
             double removeAmount = Convert.ToDouble(Console.ReadLine());
-            
+
             if (LoadProcess.CheckAmount(removeAmount))
             {
                 LoadProcess.UpdateCurrency(2, removeAmount);
