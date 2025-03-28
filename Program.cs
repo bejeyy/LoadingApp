@@ -26,7 +26,7 @@ namespace ConsoleApp1
 
             while (true)
             {
-                DisplayMenu();
+                DisplayMainMenu();
                 int userAction = GetUserInput();
 
                 if (userAction == 1)
@@ -35,7 +35,7 @@ namespace ConsoleApp1
                 }
                 else if (userAction == 2)
                 {
-                    CashOut();
+                    SendCash();
                 }
                 else if (userAction == 3)
                 {
@@ -85,12 +85,12 @@ namespace ConsoleApp1
                 }
             }
         }
-        static void DisplayMenu()
+        static void DisplayMainMenu()
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("WELCOME");
             Console.WriteLine($"BAL: {LoadProcess.balance}");
-            Console.WriteLine("\n1) Add Currency \n2) CASHOUT \n3) Buy DATA \n4) Balance \n0) EXIT");
+            Console.WriteLine("\n1) CASH IN \n2) SEND CASH \n3) Buy DATA \n4) Balance \n0) EXIT");
         }
         static int GetUserInput()
         {
@@ -108,15 +108,29 @@ namespace ConsoleApp1
             LoadProcess.UpdateCurrency(1, addAmount);
             Console.WriteLine($"Your new Balance is: {LoadProcess.balance}");
         }
-        static void CashOut()
+        static void SendCash()
         {
-            Console.WriteLine("\nCASH OUT");
-            Console.Write("[Amount]: ");
-            double removeAmount = Convert.ToDouble(Console.ReadLine());
+            string userNumber;
+            do
+            {
+                Console.WriteLine("\nSEND CASH");
+                Console.Write("[Number]: ");
+                userNumber = Console.ReadLine();
 
+                if (!LoadProcess.NumberConfirmation(userNumber))
+                {
+                    Console.WriteLine("ERROR: Please enter a valid number.");
+                }
+
+            } while (!LoadProcess.NumberConfirmation(userNumber));
+
+            Console.Write("[Amount to Send]: ");
+            double removeAmount = Convert.ToDouble(Console.ReadLine());
+            
             if (LoadProcess.CheckAmount(removeAmount))
             {
                 LoadProcess.UpdateCurrency(2, removeAmount);
+                Console.WriteLine($"Successfully sent {removeAmount} to {userNumber}");
                 Console.WriteLine($"Your new Balance is: {LoadProcess.balance}");
             }
             else

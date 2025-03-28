@@ -85,5 +85,14 @@ namespace Load_BusinessDataLogic
             }
             return false;
         }
+        public static bool NumberConfirmation(string num)
+        {
+            if (num.Length == 11)
+            {
+                int.TryParse(num, out int number);
+                return true;
+            }
+            return false;
+        }
     }
 }
