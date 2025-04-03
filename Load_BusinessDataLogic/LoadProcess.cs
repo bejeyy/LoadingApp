@@ -11,14 +11,22 @@ namespace Load_BusinessDataLogic
         public static double balance = 0.0;
         public static int userData = 0;
         static int pin = 1111;
+        public static string[] networks = new string[] { "1) Smart ", "2) Globe", "3) GOMO", "4) DITO", "0) Return" };
+        public static string[] smartLoads = new string[] { "1) GigaChad30 (500mb)", "2) GigaChad49 (1000mb)", "3) GigaChad99 (3000mb)", "4) GigaChad149 (6000mb)", "5) GigaChad199 (12000mb)", "0) Return" };
+        public static string[] globeLoads = new string[] { "1) GoSURF30 (500mb)", "2) GoSURF49 (1000mb)", "3) GoSURF99 (3000mb)", "4) GoSURF149 (6000mb)", "5) GoSURF199 (12000mb)", "0) Return" };
+        public static string[] gomoLoads = new string[] { "1) GomuGomuNo30 (500mb)", "2) GomuGomuNo49 (1000mb)", "3) GomuGomuNo99 (3000mb)", "4) GomuGomuNo149 (6000mb)", "5) GomuGomuNo199 (12000mb)", "0) Return" };
+        public static string[] ditoLoads = new string[] { "1) Level30 (500mb)", "2) Level49 (1000mb)", "3) Level99 (3000mb)", "4) Level149 (6000mb)", "5) Level199 (12000mb)", "0) Return" };
+
+
+        public static List<string> historyList = new List<string>(); 
 
         public static bool PinVerification(int userPin)
         {
             return userPin == pin;
         }
-        public static bool UpdateCurrency(int userInput, double amount)
+        public static bool UpdateBalance(int userInput, double amount)
         {
-            if (userInput == 1)
+            if (userInput == 1 && amount > 0)
             {
                 balance += amount;
                 return true;
@@ -30,8 +38,11 @@ namespace Load_BusinessDataLogic
             }
             return false;
         }
-
-        public static bool CheckAmount(double amount)
+        public static bool CheckCashInAmount(double amount)
+        {
+            return amount > 50;
+        }
+        public static bool CheckSendAmount(double amount)
         {
             return amount > 0 && amount <= balance;
         }
@@ -101,6 +112,10 @@ namespace Load_BusinessDataLogic
                 }
             }
             return true;
+        }
+        public static void AddToHistory(string cash)
+        {
+            historyList.Add(cash);
         }
     }
 }
