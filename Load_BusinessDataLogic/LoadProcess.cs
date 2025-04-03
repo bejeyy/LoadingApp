@@ -17,7 +17,6 @@ namespace Load_BusinessDataLogic
         public static string[] gomoLoads = new string[] { "1) GomuGomuNo30 (500mb)", "2) GomuGomuNo49 (1000mb)", "3) GomuGomuNo99 (3000mb)", "4) GomuGomuNo149 (6000mb)", "5) GomuGomuNo199 (12000mb)", "0) Return" };
         public static string[] ditoLoads = new string[] { "1) Level30 (500mb)", "2) Level49 (1000mb)", "3) Level99 (3000mb)", "4) Level149 (6000mb)", "5) Level199 (12000mb)", "0) Return" };
 
-
         public static List<string> historyList = new List<string>(); 
 
         public static bool PinVerification(int userPin)

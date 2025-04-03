@@ -54,12 +54,15 @@ namespace ConsoleApp1
                             break;
                         case 2:
                             DisplayGlobeDataMenu();
+                            BuyingGlobeLoad();
                             break;
                         case 3:
                             DisplayGomoDataMenu();
+                            BuyingGomoLoad();
                             break;
                         case 4:
                             DisplayDitoDataMenu();
+                            BuyingDitoLoad();
                             break;
                         case 0:
                             break;
@@ -105,21 +108,23 @@ namespace ConsoleApp1
         }
         static void CashIn()
         {
+            Console.WriteLine("\nADD CURRENCY");
+            Console.WriteLine("NOTE: Amount must be higher than 50 pesos.");
             double addAmount = 0;
             do
             {
-                Console.WriteLine("\nADD CURRENCY");
                 Console.Write("[Amount]: ");
                 addAmount = Convert.ToDouble(Console.ReadLine());
 
                 if (!LoadProcess.CheckCashInAmount(addAmount))
                 {
-                    Console.WriteLine("ERROR: Enter number higher than 50");
-                } else
+                    Console.WriteLine("\nERROR: Enter amount higher than 50");
+                }
+                else
                 {
                     LoadProcess.UpdateBalance(1, addAmount);
                     Console.WriteLine($"Your new Balance is: {LoadProcess.balance}");
-                    LoadProcess.AddToHistory($"Received amount: {addAmount}");
+                    LoadProcess.AddToHistory($"CASH IN: You have received {addAmount}.");
                 }
 
             } while (!LoadProcess.CheckCashInAmount(addAmount));
@@ -146,21 +151,25 @@ namespace ConsoleApp1
                 Console.Write("[Amount to Send]: ");
                 removeAmount = Convert.ToDouble(Console.ReadLine());
 
-                if (LoadProcess.CheckSendAmount(removeAmount))
+                if (!LoadProcess.CheckSendAmount(removeAmount))
+                {
+                    Console.WriteLine("\nERROR, Insufficient Balance");
+                }
+                else
                 {
                     LoadProcess.UpdateBalance(2, removeAmount);
                     Console.WriteLine($"\nSuccessfully sent {removeAmount} to {userNumber}");
                     Console.WriteLine($"Your new Balance is: {LoadProcess.balance}");
-                    LoadProcess.AddToHistory($"Sent {removeAmount} to {userNumber}");
+                    LoadProcess.AddToHistory($"SEND CASH: You have sent {removeAmount} to {userNumber}.");
+                    break;
                 }
-                else
-                {
-                    Console.WriteLine("\nERROR, Insufficient Balance");
-                }
+
             } while (!LoadProcess.CheckSendAmount(removeAmount));
         }
         static void DataNetworkMenu()
         {
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Available Networks\n");
             foreach (var network in LoadProcess.networks)
             {
                 Console.WriteLine(network);
@@ -168,8 +177,8 @@ namespace ConsoleApp1
         }
         static void DisplaySmartDataMenu()
         {
-            Console.WriteLine("\nBUY DATA\n");
-
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("BUY DATA\n");
             foreach (var load in LoadProcess.smartLoads)
             {
                 Console.WriteLine(load);
@@ -177,8 +186,8 @@ namespace ConsoleApp1
         }
         static void DisplayGlobeDataMenu()
         {
-            Console.WriteLine("\nBUY DATA\n");
-
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("BUY DATA\n");
             foreach (var load in LoadProcess.globeLoads)
             {
                 Console.WriteLine(load);
@@ -186,8 +195,8 @@ namespace ConsoleApp1
         }
         static void DisplayGomoDataMenu()
         {
-            Console.WriteLine("\nBUY DATA\n");
-
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("BUY DATA\n");
             foreach (var load in LoadProcess.gomoLoads)
             {
                 Console.WriteLine(load);
@@ -195,8 +204,8 @@ namespace ConsoleApp1
         }
         static void DisplayDitoDataMenu()
         {
-            Console.WriteLine("\nBUY DATA\n");
-
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("BUY DATA\n");
             foreach (var load in LoadProcess.ditoLoads)
             {
                 Console.WriteLine(load);
@@ -209,7 +218,6 @@ namespace ConsoleApp1
             Console.WriteLine($"\nBalance: P{LoadProcess.balance}");
             Console.WriteLine($"Data: {LoadProcess.userData}mb");
         }
-
         static void ShowHistory()
         {
             Console.WriteLine("-------------------------------------------");
@@ -227,19 +235,19 @@ namespace ConsoleApp1
             switch (dataChoice)
             {
                 case 1:
-                    BuyingData(1);
+                    SmartLoadConfirmation(1);
                     break;
                 case 2:
-                    BuyingData(2);
+                    SmartLoadConfirmation(2);
                     break;
                 case 3:
-                    BuyingData(3);
+                    SmartLoadConfirmation(3);
                     break;
                 case 4:
-                    BuyingData(4);
+                    SmartLoadConfirmation(4);
                     break;
                 case 5:
-                    BuyingData(5);
+                    SmartLoadConfirmation(5);
                     break;
                 case 0:
                     break;
@@ -248,7 +256,7 @@ namespace ConsoleApp1
                     break;
             }
         }
-        static void BuyingData(int action)
+        static void SmartLoadConfirmation(int action)
         {
             if (LoadProcess.BuyingDataProcess(action))
             {
@@ -286,5 +294,207 @@ namespace ConsoleApp1
                 Console.WriteLine("Balance is Insufficient.");
             }
         }
+        static void BuyingGlobeLoad()
+        {
+            Console.Write("\nEnter Number: ");
+            int dataChoice = Convert.ToInt16(Console.ReadLine());
+
+            switch (dataChoice)
+            {
+                case 1:
+                    GlobeLoadConfirmation(1);
+                    break;
+                case 2:
+                    GlobeLoadConfirmation(2);
+                    break;
+                case 3:
+                    GlobeLoadConfirmation(3);
+                    break;
+                case 4:
+                    GlobeLoadConfirmation(4);
+                    break;
+                case 5:
+                    GlobeLoadConfirmation(5);
+                    break;
+                case 0:
+                    break;
+                default:
+                    Console.WriteLine("Invalid Action.");
+                    break;
+            }
+        }
+        static void GlobeLoadConfirmation(int action)
+        {
+            if (LoadProcess.BuyingDataProcess(action))
+            {
+                switch (action)
+                {
+                    case 1:
+                        Console.WriteLine("500mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("GLOBE: You have bought GoSURF30(500mb)");
+                        break;
+                    case 2:
+                        Console.WriteLine("1000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("GLOBE: You have bought GoSURF49(1000mb)");
+                        break;
+                    case 3:
+                        Console.WriteLine("3000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("GLOBE: You have bought GoSURF99(3000mb)");
+                        break;
+                    case 4:
+                        Console.WriteLine("6000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("GLOBE: You have bought GoSURF149 (6000mb)");
+                        break;
+                    case 5:
+                        Console.WriteLine("10000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("GLOBE: You have bought GoSURF199 (12000mb)");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Balance is Insufficient.");
+            }
+        }
+        static void BuyingGomoLoad()
+        {
+            Console.Write("\nEnter Number: ");
+            int dataChoice = Convert.ToInt16(Console.ReadLine());
+
+            switch (dataChoice)
+            {
+                case 1:
+                    GomoLoadConfirmation(1);
+                    break;
+                case 2:
+                    GomoLoadConfirmation(2);
+                    break;
+                case 3:
+                    GomoLoadConfirmation(3);
+                    break;
+                case 4:
+                    GomoLoadConfirmation(4);
+                    break;
+                case 5:
+                    GomoLoadConfirmation(5);
+                    break;
+                case 0:
+                    break;
+                default:
+                    Console.WriteLine("Invalid Action.");
+                    break;
+            }
+        }
+        static void GomoLoadConfirmation(int action)
+        {
+            if (LoadProcess.BuyingDataProcess(action))
+            {
+                switch (action)
+                {
+                    case 1:
+                        Console.WriteLine("500mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("GOMO: You have bought GomuGomuNo30(500mb)");
+                        break;
+                    case 2:
+                        Console.WriteLine("1000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("GOMO: You have bought GomuGomuNo49(1000mb)");
+                        break;
+                    case 3:
+                        Console.WriteLine("3000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("GOMO: You have bought GomuGomuNo99(3000mb)");
+                        break;
+                    case 4:
+                        Console.WriteLine("6000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("GOMO: You have bought GomuGomuNo149(6000mb)");
+                        break;
+                    case 5:
+                        Console.WriteLine("10000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("GOMO: You have bought GomuGomuNo199(12000mb)");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Balance is Insufficient.");
+            }
+        }
+        static void BuyingDitoLoad()
+        {
+            Console.Write("\nEnter Number: ");
+            int dataChoice = Convert.ToInt16(Console.ReadLine());
+
+            switch (dataChoice)
+            {
+                case 1:
+                    DitoLoadConfirmation(1);
+                    break;
+                case 2:
+                    DitoLoadConfirmation(2);
+                    break;
+                case 3:
+                    DitoLoadConfirmation(3);
+                    break;
+                case 4:
+                    DitoLoadConfirmation(4);
+                    break;
+                case 5:
+                    DitoLoadConfirmation(5);
+                    break;
+                case 0:
+                    break;
+                default:
+                    Console.WriteLine("Invalid Action.");
+                    break;
+            }
+        }
+        static void DitoLoadConfirmation(int action)
+        {
+            if (LoadProcess.BuyingDataProcess(action))
+            {
+                switch (action)
+                {
+                    case 1:
+                        Console.WriteLine("500mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("DITO: You have bought Level30(500mb)");
+                        break;
+                    case 2:
+                        Console.WriteLine("1000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("DITO: You have bought Level49(1000mb)");
+                        break;
+                    case 3:
+                        Console.WriteLine("3000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("DITO: You have bought Level99(3000mb)");
+                        break;
+                    case 4:
+                        Console.WriteLine("6000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("DITO: You have bought Level149(6000mb)");
+                        break;
+                    case 5:
+                        Console.WriteLine("10000mb data.");
+                        Console.WriteLine("Purchase Complete.");
+                        LoadProcess.AddToHistory("DITO: You have bought Level199(12000mb)");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Balance is Insufficient.");
+            }
+        }
+
     }
 }
