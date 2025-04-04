@@ -8,21 +8,23 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
 
+            string userPhoneNumber = "";
             int userPin = 0;
 
             Console.WriteLine("Log-in");
-
             do
             {
+                Console.Write("Phone Number: ");
+                userPhoneNumber = Console.ReadLine();
                 Console.Write("Enter PIN: ");
                 userPin = Convert.ToInt16(Console.ReadLine());
 
-                if (!LoadProcess.PinVerification(userPin))
+                if (!LoadProcess.AccountVerification(userPhoneNumber, userPin))
                 {
-                    Console.WriteLine("WRONG PIN. Try again.\n");
+                    Console.WriteLine("ERROR: Either wrong NUMBER or PIN. Try again.\n");
                 }
 
-            } while (!LoadProcess.PinVerification(userPin));
+            } while (!LoadProcess.AccountVerification(userPhoneNumber, userPin));
 
             Console.WriteLine("Login Successful");
 
