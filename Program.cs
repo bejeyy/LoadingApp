@@ -1,36 +1,117 @@
 ﻿using Load_BusinessDataLogic;
+using System.Net.NetworkInformation;
 
 namespace ConsoleApp1
 
 {
     internal class Program
     {
+        static string[] networks = new string[] { "1) Smart ", "2) Globe", "3) GOMO", "4) DITO", "0) Return" };
+        static string[] smartLoads = new string[] { "1) GigaChad30 (500mb)", "2) GigaChad49 (1000mb)", "3) GigaChad99 (3000mb)", "4) GigaChad149 (6000mb)", "5) GigaChad199 (12000mb)", "0) Return" };
+        static string[] globeLoads = new string[] { "1) GoSURF30 (500mb)", "2) GoSURF49 (1000mb)", "3) GoSURF99 (3000mb)", "4) GoSURF149 (6000mb)", "5) GoSURF199 (12000mb)", "0) Return" };
+        static string[] gomoLoads = new string[] { "1) GomuGomuNo30 (500mb)", "2) GomuGomuNo49 (1000mb)", "3) GomuGomuNo99 (3000mb)", "4) GomuGomuNo149 (6000mb)", "5) GomuGomuNo199 (12000mb)", "0) Return" };
+        static string[] ditoLoads = new string[] { "1) Level30 (500mb)", "2) Level49 (1000mb)", "3) Level99 (3000mb)", "4) Level149 (6000mb)", "5) Level199 (12000mb)", "0) Return" };
+        static string[] profileActions = new string[] { "1) Change Name", "2) Change PIN", "0) Back" };
+
         static void Main(string[] args)
         {
-
-            string userPhoneNumber = "";
-            int userPin = 0;
-
-            Console.WriteLine("Log-in");
-            do
-            {
-                Console.Write("Phone Number: ");
-                userPhoneNumber = Console.ReadLine();
-                Console.Write("Enter PIN: ");
-                userPin = Convert.ToInt16(Console.ReadLine());
-
-                if (!LoadProcess.AccountVerification(userPhoneNumber, userPin))
-                {
-                    Console.WriteLine("ERROR: Either wrong NUMBER or PIN. Try again.\n");
-                }
-
-            } while (!LoadProcess.AccountVerification(userPhoneNumber, userPin));
-
-            Console.WriteLine("Login Successful");
-
             while (true)
             {
-                DisplayMainMenu();
+                Console.WriteLine("Welcome");
+                Console.WriteLine("1. Login");
+                Console.WriteLine("2. Register");
+                Console.WriteLine("3. Exit");
+                Console.Write("Select an option: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        LogIn();
+                        break;
+                    case "2":
+                        SignUp();
+                        break;
+                    case "3":
+                        Console.WriteLine("Thank you for using this system. Exiting....");
+                        return;
+                    default:
+                        Console.WriteLine("Invalid option. Please try again.");
+                        break;
+                }
+            }
+        }
+        static void SignUp()
+        {
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("REGISTER ACCOUNT\n");
+            string phoneNumber = "";
+            do
+            {
+                Console.Write("Enter Phone Number: ");
+                phoneNumber = Console.ReadLine();
+
+                if (!LoadProcess.NumberConfirmation(phoneNumber))
+                {
+                    Console.WriteLine("ERROR: Enter a valid number with 11 digits\n");
+
+                }
+                else if (LoadProcess.PhoneNumberExists(phoneNumber))
+                {
+                    Console.WriteLine("ERROR: Account number already exist.\n");
+                }
+
+            } while (!LoadProcess.NumberConfirmation(phoneNumber) || LoadProcess.PhoneNumberExists(phoneNumber));
+
+            Console.Write("Enter Name: ");
+            string userName = Console.ReadLine();
+
+            string PIN;
+            do
+            {
+                Console.Write("Enter PIN: ");
+                PIN = Console.ReadLine();
+
+                if (!LoadProcess.IsValidPin(PIN))
+                {
+                    Console.WriteLine("ERROR: Enter a valid 4-6 digits PIN\n.");
+                }
+            } while (!LoadProcess.IsValidPin(PIN));
+
+            Console.WriteLine("Account registered. You can now Log In.");
+            Console.WriteLine("-------------------------------------------");
+            LoadProcess.AddUserAccount(phoneNumber, userName, PIN);
+
+        }
+        static void LogIn()
+        {
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("LOG IN ACCOUNT\n");
+            string phoneNumber = "";
+            string pin = "";
+            do
+            {
+                Console.Write("Enter your phone number: ");
+                phoneNumber = Console.ReadLine();
+
+                Console.Write("Enter your PIN: ");
+                pin = Console.ReadLine();
+
+                if (!LoadProcess.AccountVerification(phoneNumber, pin))
+                {
+                    Console.WriteLine("ERROR: Either wrong Phone Number or PIN.\n");
+                }
+            } while (!LoadProcess.AccountVerification(phoneNumber, pin));
+
+            Console.WriteLine("Log In successful.");
+            Console.Clear();
+            UserAccountMenu();
+        }
+        static void UserAccountMenu()
+        {
+            while (true)
+            {
+                DisplaySystemActions();
                 int userAction = GetUserInput();
 
                 if (userAction == 1)
@@ -82,9 +163,14 @@ namespace ConsoleApp1
                 {
                     ShowHistory();
                 }
+                else if (userAction == 6)
+                {
+                    ShowProfile();
+                }
                 else if (userAction == 0)
                 {
-                    Console.WriteLine("Thank you for using this system. Exiting...");
+                    Console.WriteLine("Logging out...");
+                    Console.Clear();
                     break;
                 }
                 else
@@ -94,12 +180,12 @@ namespace ConsoleApp1
                 }
             }
         }
-        static void DisplayMainMenu()
+        static void DisplaySystemActions()
         {
             Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("WELCOME");
+            Console.WriteLine($"WELCOME {LoadProcess.loggedInUser.name}");
             Console.WriteLine($"BAL: {LoadProcess.balance}");
-            Console.WriteLine("\n1) CASH IN \n2) SEND CASH \n3) Buy DATA \n4) Balance \n5) History \n0) EXIT");
+            Console.WriteLine("\n1) CASH IN \n2) SEND CASH \n3) Buy DATA \n4) Balance \n5) History \n6) Profile \n0) LOGOUT");
         }
         static int GetUserInput()
         {
@@ -172,7 +258,7 @@ namespace ConsoleApp1
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Available Networks\n");
-            foreach (var network in LoadProcess.networks)
+            foreach (var network in networks)
             {
                 Console.WriteLine(network);
             }
@@ -181,7 +267,7 @@ namespace ConsoleApp1
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("BUY DATA\n");
-            foreach (var load in LoadProcess.smartLoads)
+            foreach (var load in smartLoads)
             {
                 Console.WriteLine(load);
             }
@@ -190,7 +276,7 @@ namespace ConsoleApp1
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("BUY DATA\n");
-            foreach (var load in LoadProcess.globeLoads)
+            foreach (var load in globeLoads)
             {
                 Console.WriteLine(load);
             }
@@ -199,7 +285,7 @@ namespace ConsoleApp1
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("BUY DATA\n");
-            foreach (var load in LoadProcess.gomoLoads)
+            foreach (var load in gomoLoads)
             {
                 Console.WriteLine(load);
             }
@@ -208,7 +294,7 @@ namespace ConsoleApp1
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("BUY DATA\n");
-            foreach (var load in LoadProcess.ditoLoads)
+            foreach (var load in ditoLoads)
             {
                 Console.WriteLine(load);
             }
@@ -227,6 +313,83 @@ namespace ConsoleApp1
             foreach (var history in LoadProcess.historyList)
             {
                 Console.WriteLine(history);
+            }
+        }
+        static void ShowProfile()
+        {
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine($"Name: {LoadProcess.loggedInUser.name}");
+            Console.WriteLine($"Phone Number: {LoadProcess.loggedInUser.phoneNumber}\n");
+
+            foreach (var actions in profileActions)
+            {
+                Console.WriteLine(actions);
+            }
+
+            int action = GetUserInput();
+
+            switch (action)
+            {
+                case 1:
+                    ChangeName();
+                    break;
+                case 2:
+                    ChangePIN();
+                    break;
+                case 0:
+                    break;
+                default:
+                    Console.WriteLine("ERROR: Invalid action input.");
+                    break;
+            }
+        }
+        static void ChangeName()
+        {
+            do
+            {
+                Console.Write("Enter new Name: ");
+                string newName = Console.ReadLine();
+
+                if (!string.IsNullOrEmpty(newName))
+                {
+                    LoadProcess.loggedInUser.name = newName;
+                    Console.WriteLine("Name updated sucessfully.");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("ERROR. Input a name");
+                }
+            } while (true);
+        }
+        static void ChangePIN()
+        {
+            Console.Write("Enter your current PIN: ");
+            string currentPIN = Console.ReadLine();
+
+            if (LoadProcess.CurrentPinVerification(currentPIN))
+            {
+                do
+                {
+                    Console.Write("Enter your new PIN: ");
+                    string newPIN = Console.ReadLine();
+
+                    if (LoadProcess.IsValidPin(newPIN))
+                    {
+                        LoadProcess.loggedInUser.pin = newPIN;
+                        Console.WriteLine("PIN updated successfully.");
+                        return;
+                    } else
+                    {
+                        Console.WriteLine("ERROR: Enter a valid number PIN with 4-6 digits");
+                    }
+
+                } while (true);
+
+
+            } else
+            {
+                Console.WriteLine("ERROR: Wrong PIN.");
             }
         }
         static void BuyingSmartLoad()

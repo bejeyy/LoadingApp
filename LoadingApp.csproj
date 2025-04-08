@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="Load_BusinessDataLogic\Load_BusinessDataLogic.csproj" />
+    <ProjectReference Include="Load_BusinessDataLogic\LoadBusinessLogic.csproj" />
   </ItemGroup>
 
 </Project>
