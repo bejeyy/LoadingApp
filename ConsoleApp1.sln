@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadingApp", "LoadingApp.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadBusinessLogic", "Load_BusinessDataLogic\LoadBusinessLogic.csproj", "{6CDBE979-2F15-4F85-A6F7-3481F8AE31F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadDataLogic", "LoadDataLogic\LoadDataLogic.csproj", "{B04CC88A-38F1-440D-9EB6-FCAC6E700E13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadCommon", "LoadCommon\LoadCommon.csproj", "{73787100-E6D0-4781-BD7B-9907A62F2660}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{6CDBE979-2F15-4F85-A6F7-3481F8AE31F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CDBE979-2F15-4F85-A6F7-3481F8AE31F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CDBE979-2F15-4F85-A6F7-3481F8AE31F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B04CC88A-38F1-440D-9EB6-FCAC6E700E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B04CC88A-38F1-440D-9EB6-FCAC6E700E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B04CC88A-38F1-440D-9EB6-FCAC6E700E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B04CC88A-38F1-440D-9EB6-FCAC6E700E13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73787100-E6D0-4781-BD7B-9907A62F2660}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73787100-E6D0-4781-BD7B-9907A62F2660}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73787100-E6D0-4781-BD7B-9907A62F2660}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73787100-E6D0-4781-BD7B-9907A62F2660}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

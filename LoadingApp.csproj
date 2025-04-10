@@ -8,8 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="LoadCommon\**" />
+    <Compile Remove="LoadDataLogic\**" />
     <Compile Remove="Load_BusinessDataLogic\**" />
+    <EmbeddedResource Remove="LoadCommon\**" />
+    <EmbeddedResource Remove="LoadDataLogic\**" />
     <EmbeddedResource Remove="Load_BusinessDataLogic\**" />
+    <None Remove="LoadCommon\**" />
+    <None Remove="LoadDataLogic\**" />
     <None Remove="Load_BusinessDataLogic\**" />
   </ItemGroup>
 

@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LoadCommon\LoadCommon.csproj" />
-    <ProjectReference Include="..\LoadDataLogic\LoadDataLogic.csproj" />
-  </ItemGroup>
-
 </Project>

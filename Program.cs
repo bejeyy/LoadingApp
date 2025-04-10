@@ -1,4 +1,5 @@
 ﻿using Load_BusinessDataLogic;
+using LoadCommon;
 using System.Net.NetworkInformation;
 
 namespace ConsoleApp1
@@ -13,6 +14,10 @@ namespace ConsoleApp1
         static string[] ditoLoads = new string[] { "1) Level30 (500mb)", "2) Level49 (1000mb)", "3) Level99 (3000mb)", "4) Level149 (6000mb)", "5) Level199 (12000mb)", "0) Return" };
         static string[] profileActions = new string[] { "1) Change Name", "2) Change PIN", "0) Back" };
 
+        static LoadBusinessService LoadProcess = new LoadBusinessService();
+        static LoadAccount loggedInUser = null;
+        static string phoneNumber = "";
+
         static void Main(string[] args)
         {
             while (true)
@@ -20,19 +25,19 @@ namespace ConsoleApp1
                 Console.WriteLine("Welcome");
                 Console.WriteLine("1. Login");
                 Console.WriteLine("2. Register");
-                Console.WriteLine("3. Exit");
+                Console.WriteLine("0. Exit");
                 Console.Write("Select an option: ");
-                string choice = Console.ReadLine();
+                int choice = Convert.ToInt16(Console.ReadLine());
 
                 switch (choice)
                 {
-                    case "1":
+                    case 1:
                         LogIn();
                         break;
-                    case "2":
+                    case 2:
                         SignUp();
                         break;
-                    case "3":
+                    case 0:
                         Console.WriteLine("Thank you for using this system. Exiting....");
                         return;
                     default:
@@ -45,7 +50,7 @@ namespace ConsoleApp1
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("REGISTER ACCOUNT\n");
-            string phoneNumber = "";
+
             do
             {
                 Console.Write("Enter Phone Number: ");
@@ -56,12 +61,12 @@ namespace ConsoleApp1
                     Console.WriteLine("ERROR: Enter a valid number with 11 digits\n");
 
                 }
-                else if (LoadProcess.PhoneNumberExists(phoneNumber))
+                else if (LoadProcess.PhoneNumberExist(phoneNumber))
                 {
                     Console.WriteLine("ERROR: Account number already exist.\n");
                 }
 
-            } while (!LoadProcess.NumberConfirmation(phoneNumber) || LoadProcess.PhoneNumberExists(phoneNumber));
+            } while (!LoadProcess.NumberConfirmation(phoneNumber) || LoadProcess.PhoneNumberExist(phoneNumber));
 
             Console.Write("Enter Name: ");
             string userName = Console.ReadLine();
@@ -83,11 +88,11 @@ namespace ConsoleApp1
             LoadProcess.AddUserAccount(phoneNumber, userName, PIN);
 
         }
+
         static void LogIn()
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("LOG IN ACCOUNT\n");
-            string phoneNumber = "";
             string pin = "";
             do
             {
@@ -103,11 +108,13 @@ namespace ConsoleApp1
                 }
             } while (!LoadProcess.AccountVerification(phoneNumber, pin));
 
+            loggedInUser = LoadProcess.SetUser(phoneNumber);
             Console.WriteLine("Log In successful.");
             Console.Clear();
-            UserAccountMenu();
+            LoadingSystem();
         }
-        static void UserAccountMenu()
+
+        static void LoadingSystem()
         {
             while (true)
             {
@@ -169,6 +176,7 @@ namespace ConsoleApp1
                 }
                 else if (userAction == 0)
                 {
+                    loggedInUser = null;
                     Console.WriteLine("Logging out...");
                     Console.Clear();
                     break;
@@ -180,13 +188,15 @@ namespace ConsoleApp1
                 }
             }
         }
+
         static void DisplaySystemActions()
         {
             Console.WriteLine("-------------------------------------------");
-            Console.WriteLine($"WELCOME {LoadProcess.loggedInUser.name}");
-            Console.WriteLine($"BAL: {LoadProcess.balance}");
+            Console.WriteLine($"WELCOME {loggedInUser.name}");
+            Console.WriteLine($"BAL: {loggedInUser.balance}");
             Console.WriteLine("\n1) CASH IN \n2) SEND CASH \n3) Buy DATA \n4) Balance \n5) History \n6) Profile \n0) LOGOUT");
         }
+
         static int GetUserInput()
         {
             Console.Write("\nEnter Action: ");
@@ -194,6 +204,7 @@ namespace ConsoleApp1
 
             return userInput;
         }
+
         static void CashIn()
         {
             Console.WriteLine("\nADD CURRENCY");
@@ -210,13 +221,14 @@ namespace ConsoleApp1
                 }
                 else
                 {
-                    LoadProcess.UpdateBalance(1, addAmount);
-                    Console.WriteLine($"Your new Balance is: {LoadProcess.balance}");
-                    LoadProcess.AddToHistory($"CASH IN: You have received {addAmount}.");
+                    LoadProcess.UpdateBalance(1, addAmount, phoneNumber);
+                    Console.WriteLine($"Your new Balance is: {loggedInUser.balance}");
+                    LoadProcess.AddToHistory(loggedInUser, $"CASH IN: You have received {addAmount}.");
                 }
 
             } while (!LoadProcess.CheckCashInAmount(addAmount));
         }
+
         static void SendCash()
         {
             string userNumber;
@@ -239,21 +251,22 @@ namespace ConsoleApp1
                 Console.Write("[Amount to Send]: ");
                 removeAmount = Convert.ToDouble(Console.ReadLine());
 
-                if (!LoadProcess.CheckSendAmount(removeAmount))
+                if (!LoadProcess.CheckSendAmount(removeAmount, phoneNumber))
                 {
                     Console.WriteLine("\nERROR, Insufficient Balance");
                 }
                 else
                 {
-                    LoadProcess.UpdateBalance(2, removeAmount);
+                    LoadProcess.UpdateBalance(2, removeAmount, phoneNumber);
                     Console.WriteLine($"\nSuccessfully sent {removeAmount} to {userNumber}");
-                    Console.WriteLine($"Your new Balance is: {LoadProcess.balance}");
-                    LoadProcess.AddToHistory($"SEND CASH: You have sent {removeAmount} to {userNumber}.");
+                    Console.WriteLine($"Your new Balance is: {loggedInUser.balance}");
+                    LoadProcess.AddToHistory(loggedInUser, $"SEND CASH: You have sent {removeAmount} to {userNumber}.");
                     break;
                 }
 
-            } while (!LoadProcess.CheckSendAmount(removeAmount));
+            } while (!LoadProcess.CheckSendAmount(removeAmount, phoneNumber));
         }
+
         static void DataNetworkMenu()
         {
             Console.WriteLine("-------------------------------------------");
@@ -263,6 +276,7 @@ namespace ConsoleApp1
                 Console.WriteLine(network);
             }
         }
+
         static void DisplaySmartDataMenu()
         {
             Console.WriteLine("-------------------------------------------");
@@ -272,6 +286,7 @@ namespace ConsoleApp1
                 Console.WriteLine(load);
             }
         }
+
         static void DisplayGlobeDataMenu()
         {
             Console.WriteLine("-------------------------------------------");
@@ -281,6 +296,7 @@ namespace ConsoleApp1
                 Console.WriteLine(load);
             }
         }
+
         static void DisplayGomoDataMenu()
         {
             Console.WriteLine("-------------------------------------------");
@@ -290,6 +306,7 @@ namespace ConsoleApp1
                 Console.WriteLine(load);
             }
         }
+
         static void DisplayDitoDataMenu()
         {
             Console.WriteLine("-------------------------------------------");
@@ -299,27 +316,30 @@ namespace ConsoleApp1
                 Console.WriteLine(load);
             }
         }
+
         static void DisplayBalance()
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Your Balance:");
-            Console.WriteLine($"\nBalance: P{LoadProcess.balance}");
-            Console.WriteLine($"Data: {LoadProcess.userData}mb");
+            Console.WriteLine($"\nBalance: P{loggedInUser.balance}");
+            Console.WriteLine($"Data: {loggedInUser.data}mb");
         }
+
         static void ShowHistory()
         {
             Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("History\n");
-            foreach (var history in LoadProcess.historyList)
+            Console.WriteLine("Your Transactions\n");
+            foreach (var boughtHistory in loggedInUser.history)
             {
-                Console.WriteLine(history);
+                Console.WriteLine(boughtHistory);
             }
         }
+
         static void ShowProfile()
         {
             Console.WriteLine("-------------------------------------------");
-            Console.WriteLine($"Name: {LoadProcess.loggedInUser.name}");
-            Console.WriteLine($"Phone Number: {LoadProcess.loggedInUser.phoneNumber}\n");
+            Console.WriteLine($"Name: {loggedInUser.name}");
+            Console.WriteLine($"Phone Number: {loggedInUser.phoneNumber}\n");
 
             foreach (var actions in profileActions)
             {
@@ -343,6 +363,7 @@ namespace ConsoleApp1
                     break;
             }
         }
+
         static void ChangeName()
         {
             do
@@ -352,7 +373,7 @@ namespace ConsoleApp1
 
                 if (!string.IsNullOrEmpty(newName))
                 {
-                    LoadProcess.loggedInUser.name = newName;
+                    loggedInUser.name = newName;
                     Console.WriteLine("Name updated sucessfully.");
                     return;
                 }
@@ -362,6 +383,7 @@ namespace ConsoleApp1
                 }
             } while (true);
         }
+
         static void ChangePIN()
         {
             Console.Write("Enter your current PIN: ");
@@ -376,7 +398,7 @@ namespace ConsoleApp1
 
                     if (LoadProcess.IsValidPin(newPIN))
                     {
-                        LoadProcess.loggedInUser.pin = newPIN;
+                        loggedInUser.pin = newPIN;
                         Console.WriteLine("PIN updated successfully.");
                         return;
                     } else
@@ -392,6 +414,7 @@ namespace ConsoleApp1
                 Console.WriteLine("ERROR: Wrong PIN.");
             }
         }
+
         static void BuyingSmartLoad()
         {
             Console.Write("\nEnter Number: ");
@@ -421,36 +444,37 @@ namespace ConsoleApp1
                     break;
             }
         }
+
         static void SmartLoadConfirmation(int action)
         {
-            if (LoadProcess.BuyingDataProcess(action))
+            if (LoadProcess.BuyingDataProcess(action, phoneNumber))
             {
                 switch (action)
                 {
                     case 1:
                         Console.WriteLine("500mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("SMART: You have bought GigaChad30(500mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "SMART: You have bought GigaChad30(500mb)");
                         break;
                     case 2:
                         Console.WriteLine("1000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("SMART: You have bought GigaChad49(1000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "SMART: You have bought GigaChad49(1000mb)");
                         break;
                     case 3:
                         Console.WriteLine("3000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("SMART: You have bought GigaChad99(3000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "SMART: You have bought GigaChad99(3000mb)");
                         break;
                     case 4:
                         Console.WriteLine("6000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("SMART: You have bought GigaChad149 (6000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "SMART: You have bought GigaChad149 (6000mb)");
                         break;
                     case 5:
                         Console.WriteLine("10000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("SMART: You have bought GigaChad199 (12000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "SMART: You have bought GigaChad199 (12000mb)");
                         break;
                 }
             }
@@ -459,6 +483,7 @@ namespace ConsoleApp1
                 Console.WriteLine("Balance is Insufficient.");
             }
         }
+
         static void BuyingGlobeLoad()
         {
             Console.Write("\nEnter Number: ");
@@ -488,36 +513,37 @@ namespace ConsoleApp1
                     break;
             }
         }
+
         static void GlobeLoadConfirmation(int action)
         {
-            if (LoadProcess.BuyingDataProcess(action))
+            if (LoadProcess.BuyingDataProcess(action, phoneNumber))
             {
                 switch (action)
                 {
                     case 1:
                         Console.WriteLine("500mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("GLOBE: You have bought GoSURF30(500mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "GLOBE: You have bought GoSURF30(500mb)");
                         break;
                     case 2:
                         Console.WriteLine("1000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("GLOBE: You have bought GoSURF49(1000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "GLOBE: You have bought GoSURF49(1000mb)");
                         break;
                     case 3:
                         Console.WriteLine("3000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("GLOBE: You have bought GoSURF99(3000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "GLOBE: You have bought GoSURF99(3000mb)");
                         break;
                     case 4:
                         Console.WriteLine("6000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("GLOBE: You have bought GoSURF149 (6000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "GLOBE: You have bought GoSURF149 (6000mb)");
                         break;
                     case 5:
                         Console.WriteLine("10000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("GLOBE: You have bought GoSURF199 (12000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "GLOBE: You have bought GoSURF199 (12000mb)");
                         break;
                 }
             }
@@ -526,6 +552,7 @@ namespace ConsoleApp1
                 Console.WriteLine("Balance is Insufficient.");
             }
         }
+
         static void BuyingGomoLoad()
         {
             Console.Write("\nEnter Number: ");
@@ -555,36 +582,37 @@ namespace ConsoleApp1
                     break;
             }
         }
+
         static void GomoLoadConfirmation(int action)
         {
-            if (LoadProcess.BuyingDataProcess(action))
+            if (LoadProcess.BuyingDataProcess(action, phoneNumber))
             {
                 switch (action)
                 {
                     case 1:
                         Console.WriteLine("500mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("GOMO: You have bought GomuGomuNo30(500mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "GOMO: You have bought GomuGomuNo30(500mb)");
                         break;
                     case 2:
                         Console.WriteLine("1000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("GOMO: You have bought GomuGomuNo49(1000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "GOMO: You have bought GomuGomuNo49(1000mb)");
                         break;
                     case 3:
                         Console.WriteLine("3000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("GOMO: You have bought GomuGomuNo99(3000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "GOMO: You have bought GomuGomuNo99(3000mb)");
                         break;
                     case 4:
                         Console.WriteLine("6000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("GOMO: You have bought GomuGomuNo149(6000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "GOMO: You have bought GomuGomuNo149(6000mb)");
                         break;
                     case 5:
                         Console.WriteLine("10000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("GOMO: You have bought GomuGomuNo199(12000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "GOMO: You have bought GomuGomuNo199(12000mb)");
                         break;
                 }
             }
@@ -593,6 +621,7 @@ namespace ConsoleApp1
                 Console.WriteLine("Balance is Insufficient.");
             }
         }
+
         static void BuyingDitoLoad()
         {
             Console.Write("\nEnter Number: ");
@@ -622,36 +651,37 @@ namespace ConsoleApp1
                     break;
             }
         }
+
         static void DitoLoadConfirmation(int action)
         {
-            if (LoadProcess.BuyingDataProcess(action))
+            if (LoadProcess.BuyingDataProcess(action, phoneNumber))
             {
                 switch (action)
                 {
                     case 1:
                         Console.WriteLine("500mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("DITO: You have bought Level30(500mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "DITO: You have bought Level30(500mb)");
                         break;
                     case 2:
                         Console.WriteLine("1000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("DITO: You have bought Level49(1000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "DITO: You have bought Level49(1000mb)");
                         break;
                     case 3:
                         Console.WriteLine("3000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("DITO: You have bought Level99(3000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "DITO: You have bought Level99(3000mb)");
                         break;
                     case 4:
                         Console.WriteLine("6000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("DITO: You have bought Level149(6000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "DITO: You have bought Level149(6000mb)");
                         break;
                     case 5:
                         Console.WriteLine("10000mb data.");
                         Console.WriteLine("Purchase Complete.");
-                        LoadProcess.AddToHistory("DITO: You have bought Level199(12000mb)");
+                        LoadProcess.AddToHistory(loggedInUser, "DITO: You have bought Level199(12000mb)");
                         break;
                 }
             }
