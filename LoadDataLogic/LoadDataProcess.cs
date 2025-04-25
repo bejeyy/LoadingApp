@@ -53,6 +53,7 @@ namespace LoadDataLogic
         {
             loadAccount.history.Add(bought);
         }
+
         public bool CheckPhoneNumber(string phoneNum)
         {
             foreach (var account in accounts)
@@ -109,6 +110,32 @@ namespace LoadDataLogic
                     account.data = newDataAmount;
                 }
             }
+        }
+
+        public bool ChangeName(string phoneNum, string newName)
+        {
+            foreach (var account in accounts)
+            {
+                if (account.phoneNumber == phoneNum)
+                {
+                    account.name = newName;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool ChangePin(string phoneNum, string newPIN)
+        {
+            foreach (var account in accounts)
+            {
+                if (account.phoneNumber == phoneNum)
+                {
+                    account.pin = newPIN;
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool CurrentPinChecker(string PIN)

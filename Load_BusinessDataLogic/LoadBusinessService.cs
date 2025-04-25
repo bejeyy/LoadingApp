@@ -156,6 +156,16 @@ namespace Load_BusinessDataLogic
             return loadDataProcess.CurrentPinChecker(pin);
         }
 
+        public bool ChangeName(string phoneNumber, string newName)
+        {
+            return loadDataProcess.ChangeName(phoneNumber, newName);
+        }
+
+        public bool ChangePIN(string phoneNumber, string newPIN)
+        {
+            return loadDataProcess.ChangePin(phoneNumber, newPIN);
+        }
+
         public void AddToHistory(LoadAccount user, string bought)
         {
             loadDataProcess.AddHistory(user, bought);

@@ -26,7 +26,7 @@ namespace ConsoleApp1
                 Console.WriteLine("1. Login");
                 Console.WriteLine("2. Register");
                 Console.WriteLine("0. Exit");
-                Console.Write("Select an option: ");
+                Console.Write("\nSelect an option: ");
                 int choice = Convert.ToInt16(Console.ReadLine());
 
                 switch (choice)
@@ -81,6 +81,7 @@ namespace ConsoleApp1
                 {
                     Console.WriteLine("ERROR: Enter a valid 4-6 digits PIN\n.");
                 }
+
             } while (!LoadProcess.IsValidPin(PIN));
 
             Console.WriteLine("Account registered. You can now Log In.");
@@ -207,7 +208,8 @@ namespace ConsoleApp1
 
         static void CashIn()
         {
-            Console.WriteLine("\nADD CURRENCY");
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("ADD CURRENCY");
             Console.WriteLine("NOTE: Amount must be higher than 50 pesos.");
             double addAmount = 0;
             do
@@ -231,10 +233,11 @@ namespace ConsoleApp1
 
         static void SendCash()
         {
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("SEND CASH");
             string userNumber;
             do
             {
-                Console.WriteLine("\nSEND CASH");
                 Console.Write("[Number]: ");
                 userNumber = Console.ReadLine();
 
@@ -366,6 +369,8 @@ namespace ConsoleApp1
 
         static void ChangeName()
         {
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("CHANGE NAME");
             do
             {
                 Console.Write("Enter new Name: ");
@@ -373,19 +378,21 @@ namespace ConsoleApp1
 
                 if (!string.IsNullOrEmpty(newName))
                 {
-                    loggedInUser.name = newName;
+                    LoadProcess.ChangeName(phoneNumber, newName);
                     Console.WriteLine("Name updated sucessfully.");
                     return;
                 }
                 else
                 {
-                    Console.WriteLine("ERROR. Input a name");
+                    Console.WriteLine("\nERROR. Input a name");
                 }
             } while (true);
         }
 
         static void ChangePIN()
         {
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("CHANGE PIN");
             Console.Write("Enter your current PIN: ");
             string currentPIN = Console.ReadLine();
 
@@ -398,16 +405,15 @@ namespace ConsoleApp1
 
                     if (LoadProcess.IsValidPin(newPIN))
                     {
-                        loggedInUser.pin = newPIN;
+                        LoadProcess.ChangePIN(phoneNumber, newPIN);
                         Console.WriteLine("PIN updated successfully.");
                         return;
                     } else
                     {
-                        Console.WriteLine("ERROR: Enter a valid number PIN with 4-6 digits");
+                        Console.WriteLine("\nERROR: Enter a valid number PIN with 4-6 digits");
                     }
 
                 } while (true);
-
 
             } else
             {
