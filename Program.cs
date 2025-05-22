@@ -17,6 +17,7 @@ namespace ConsoleApp1
         static LoadBusinessService LoadProcess = new LoadBusinessService();
         static LoadAccount loggedInUser = null;
         static string phoneNumber = "";
+        static string pin = "";
 
         static void Main(string[] args)
         {
@@ -94,7 +95,7 @@ namespace ConsoleApp1
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("LOG IN ACCOUNT\n");
-            string pin = "";
+            
             do
             {
                 Console.Write("Enter your phone number: ");
@@ -109,7 +110,7 @@ namespace ConsoleApp1
                 }
             } while (!LoadProcess.AccountVerification(phoneNumber, pin));
 
-            loggedInUser = LoadProcess.SetUser(phoneNumber);
+            loggedInUser = LoadProcess.SetUser(phoneNumber, pin);
             Console.WriteLine("Log In successful.");
             Console.Clear();
             LoadingSystem();
@@ -223,7 +224,7 @@ namespace ConsoleApp1
                 }
                 else
                 {
-                    LoadProcess.UpdateBalance(1, addAmount, phoneNumber);
+                    LoadProcess.UpdateBalance(1, addAmount, phoneNumber, pin);
                     Console.WriteLine($"Your new Balance is: {loggedInUser.balance}");
                     LoadProcess.AddToHistory(loggedInUser, $"CASH IN: You have received {addAmount}.");
                 }
@@ -254,20 +255,20 @@ namespace ConsoleApp1
                 Console.Write("[Amount to Send]: ");
                 removeAmount = Convert.ToDouble(Console.ReadLine());
 
-                if (!LoadProcess.CheckSendAmount(removeAmount, phoneNumber))
+                if (!LoadProcess.CheckSendAmount(removeAmount, phoneNumber, pin))
                 {
                     Console.WriteLine("\nERROR, Insufficient Balance");
                 }
                 else
                 {
-                    LoadProcess.UpdateBalance(2, removeAmount, phoneNumber);
+                    LoadProcess.UpdateBalance(2, removeAmount, phoneNumber, pin);
                     Console.WriteLine($"\nSuccessfully sent {removeAmount} to {userNumber}");
                     Console.WriteLine($"Your new Balance is: {loggedInUser.balance}");
                     LoadProcess.AddToHistory(loggedInUser, $"SEND CASH: You have sent {removeAmount} to {userNumber}.");
                     break;
                 }
 
-            } while (!LoadProcess.CheckSendAmount(removeAmount, phoneNumber));
+            } while (!LoadProcess.CheckSendAmount(removeAmount, phoneNumber, pin));
         }
 
         static void DataNetworkMenu()
@@ -378,7 +379,7 @@ namespace ConsoleApp1
 
                 if (!string.IsNullOrEmpty(newName))
                 {
-                    LoadProcess.ChangeName(phoneNumber, newName);
+                    LoadProcess.ChangeName(phoneNumber, pin, newName);
                     Console.WriteLine("Name updated sucessfully.");
                     return;
                 }
@@ -405,7 +406,7 @@ namespace ConsoleApp1
 
                     if (LoadProcess.IsValidPin(newPIN))
                     {
-                        LoadProcess.ChangePIN(phoneNumber, newPIN);
+                        LoadProcess.ChangePIN(phoneNumber, pin, newPIN);
                         Console.WriteLine("PIN updated successfully.");
                         return;
                     } else
@@ -453,7 +454,7 @@ namespace ConsoleApp1
 
         static void SmartLoadConfirmation(int action)
         {
-            if (LoadProcess.BuyingDataProcess(action, phoneNumber))
+            if (LoadProcess.BuyingDataProcess(action, phoneNumber, pin))
             {
                 switch (action)
                 {
@@ -522,7 +523,7 @@ namespace ConsoleApp1
 
         static void GlobeLoadConfirmation(int action)
         {
-            if (LoadProcess.BuyingDataProcess(action, phoneNumber))
+            if (LoadProcess.BuyingDataProcess(action, phoneNumber, pin))
             {
                 switch (action)
                 {
@@ -591,7 +592,7 @@ namespace ConsoleApp1
 
         static void GomoLoadConfirmation(int action)
         {
-            if (LoadProcess.BuyingDataProcess(action, phoneNumber))
+            if (LoadProcess.BuyingDataProcess(action, phoneNumber, pin))
             {
                 switch (action)
                 {
@@ -660,7 +661,7 @@ namespace ConsoleApp1
 
         static void DitoLoadConfirmation(int action)
         {
-            if (LoadProcess.BuyingDataProcess(action, phoneNumber))
+            if (LoadProcess.BuyingDataProcess(action, phoneNumber, pin))
             {
                 switch (action)
                 {

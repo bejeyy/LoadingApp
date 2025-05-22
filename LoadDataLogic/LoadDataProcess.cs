@@ -11,18 +11,6 @@ namespace LoadDataLogic
     {
         List<LoadAccount> accounts = new List<LoadAccount>();
 
-        public bool AccountVerificationProcess(string enteredPhoneNumber, string userPIN)
-        {
-            foreach (var account in accounts)
-            {
-                if (account.phoneNumber == enteredPhoneNumber && account.pin == userPIN)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public bool RegisterAccount(string phoneNum, string userName, string userPin)
         {
             foreach (var user in accounts)
@@ -37,117 +25,34 @@ namespace LoadDataLogic
             return true;
         }
 
-        public LoadAccount GetUserAccount(string phoneNum)
+        public List<LoadAccount> GetAccounts()
         {
-            foreach (var account in accounts)
-            {
-                if (account.phoneNumber == phoneNum)
-                {
-                    return account;
-                }
-            }
-            return null;
+            return accounts;
         }
 
-        public void AddHistory(LoadAccount loadAccount, string bought)
+        private int FindAccountIndex(LoadAccount loadAccount)
         {
-            loadAccount.history.Add(bought);
-        }
-
-        public bool CheckPhoneNumber(string phoneNum)
-        {
-            foreach (var account in accounts)
+            for (int i = 0; i < accounts.Count; i++)
             {
-                if (account.phoneNumber == phoneNum)
+                if (accounts[i].phoneNumber == loadAccount.phoneNumber)
                 {
-                    return true;
+                    return i;
                 }
             }
-            return false;
+            return -1;
         }
 
-        public double GetAccountBalance(string phoneNumber)
+        public void UpdateAccount(LoadAccount loadAccount)
         {
-            foreach (var account in accounts)
-            {
-                if (account.phoneNumber == phoneNumber)
-                {
-                    return account.balance;
-                }
-            }
-            return 0.0;
+            int index = FindAccountIndex(loadAccount);
+
+            accounts[index].name = loadAccount.name;
+            accounts[index].balance = loadAccount.balance;
+            accounts[index].data = loadAccount.data;
+            accounts[index].pin = loadAccount.pin;
+            accounts[index].history = loadAccount.history;
         }
 
-        public double GetUserData(string phoneNumber)
-        {
-            foreach (var account in accounts)
-            {
-                if (account.phoneNumber == phoneNumber)
-                {
-                    return account.data;
-                }
-            }
-            return 0.0;
-        }
 
-        public void UpdateBalance(string phoneNum, double newAmount)
-        {
-            foreach (var account in accounts)
-            {
-                if (account.phoneNumber == phoneNum)
-                {
-                    account.balance = newAmount;
-                }
-            }
-        }
-
-        public void UpdateData(string phoneNum, double newDataAmount)
-        {
-            foreach (var account in accounts)
-            {
-                if (account.phoneNumber == phoneNum)
-                {
-                    account.data = newDataAmount;
-                }
-            }
-        }
-
-        public bool ChangeName(string phoneNum, string newName)
-        {
-            foreach (var account in accounts)
-            {
-                if (account.phoneNumber == phoneNum)
-                {
-                    account.name = newName;
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public bool ChangePin(string phoneNum, string newPIN)
-        {
-            foreach (var account in accounts)
-            {
-                if (account.phoneNumber == phoneNum)
-                {
-                    account.pin = newPIN;
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public bool CurrentPinChecker(string PIN)
-        {
-            foreach (var account in accounts)
-            {
-                if (account.pin == PIN)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
     }
 }

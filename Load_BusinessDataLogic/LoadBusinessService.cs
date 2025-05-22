@@ -3,6 +3,7 @@ using LoadDataLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,33 +22,50 @@ namespace Load_BusinessDataLogic
 
         public bool AccountVerification(string enteredPhoneNumber, string userPIN)
         {
-            return loadDataProcess.AccountVerificationProcess(enteredPhoneNumber, userPIN);
+            var account = GetLoadAccount(enteredPhoneNumber, userPIN);
+
+            if (account != null)
+            {
+                return true;
+            }
+
+            return false;
+
         }
 
-        public LoadAccount SetUser(string phoneNum)
+        public LoadAccount SetUser(string phoneNum, string pin)
         {
-            return loadDataProcess.GetUserAccount(phoneNum);
+            return GetLoadAccount(phoneNum, pin);
         }
 
         public bool PhoneNumberExist(string phoneNum)
         {
-            return loadDataProcess.CheckPhoneNumber(phoneNum);
+            var loadAccounts = loadDataProcess.GetAccounts();
+
+            foreach (var account in loadAccounts)
+            {
+                if (account.phoneNumber == phoneNum)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public bool UpdateBalance(int userInput, double amount, string phoneNum)
+        public bool UpdateBalance(int userInput, double amount, string phoneNum, string pin)
         {
-            double balance = loadDataProcess.GetAccountBalance(phoneNum);
+            var loadAccount = GetLoadAccount(phoneNum, pin);
 
             if (userInput == 1 && amount > 0)
             {
-                balance += amount;
-                loadDataProcess.UpdateBalance(phoneNum, balance);
+                loadAccount.balance += amount;
+                loadDataProcess.UpdateAccount(loadAccount);
                 return true;
             }
-            else if (userInput == 2 && amount <= balance)
+            else if (userInput == 2 && amount <= loadAccount.balance)
             {
-                balance -= amount;
-                loadDataProcess.UpdateBalance(phoneNum, balance);
+                loadAccount.balance -= amount;
+                loadDataProcess.UpdateAccount(loadAccount);
                 return true;
             }
             return false;
@@ -58,69 +76,63 @@ namespace Load_BusinessDataLogic
             return amount > 50;
         }
 
-        public bool CheckSendAmount(double amount, string phoneNum)
+        public bool CheckSendAmount(double amount, string phoneNum, string pin)
         {
-            double balance = loadDataProcess.GetAccountBalance(phoneNum);
-            return amount > 0 && amount <= balance;
+            var loadAccount = GetLoadAccount(phoneNum, pin);
+            return amount > 0 && amount <= loadAccount.balance;
         }
 
-        public bool BuyingDataProcess(int action, string phoneNum)
+        public bool BuyingDataProcess(int action, string phoneNum, string pin)
         {
-            double balance = loadDataProcess.GetAccountBalance(phoneNum);
-            double userData = loadDataProcess.GetUserData(phoneNum);
+            var loadAccount = GetLoadAccount(phoneNum, pin);
 
             if (action == 1)
             {
-                if (balance >= 30)
+                if (loadAccount.balance >= 30)
                 {
-                    balance -= 30;
-                    userData += 500;
-                    loadDataProcess.UpdateBalance(phoneNum, balance);
-                    loadDataProcess.UpdateData(phoneNum, userData);
+                    loadAccount.balance -= 30;
+                    loadAccount.data += 500;
+                    loadDataProcess.UpdateAccount(loadAccount);
                     return true;
                 }
             }
             else if (action == 2)
             {
-                if (balance >= 49)
+                if (loadAccount.balance >= 49)
                 {
-                    balance -= 49;
-                    userData += 1000;
-                    loadDataProcess.UpdateBalance(phoneNum, balance);
-                    loadDataProcess.UpdateData(phoneNum, userData);
+                    loadAccount.balance -= 49;
+                    loadAccount.data += 1000;
+                    loadDataProcess.UpdateAccount(loadAccount);
                     return true;
                 }
             }
             else if (action == 3)
             {
-                if (balance >= 99)
+                if (loadAccount.balance >= 99)
                 {
-                    balance -= 99;
-                    userData += 3000;
-                    loadDataProcess.UpdateBalance(phoneNum, balance);
-                    loadDataProcess.UpdateData(phoneNum, userData);
+                    loadAccount.balance -= 99;
+                    loadAccount.data += 3000;
+                    loadDataProcess.UpdateAccount(loadAccount);
                     return true;
                 }
             }
             else if (action == 4)
             {
-                if (balance >= 149)
+                if (loadAccount.balance >= 149)
                 {
-                    balance -= 149;
-                    userData += 6000;
-                    loadDataProcess.UpdateBalance(phoneNum, balance);
-                    loadDataProcess.UpdateData(phoneNum, userData);
+                    loadAccount.balance -= 149;
+                    loadAccount.data += 6000;
+                    loadDataProcess.UpdateAccount(loadAccount);
                     return true;
                 }
             }
             else if (action == 5)
             {
-                if (balance >= 199)
+                if (loadAccount.balance >= 199)
                 {
-                    balance -= 199;
-                    userData += 10000;
-                    loadDataProcess.UpdateBalance(phoneNum, balance);
-                    loadDataProcess.UpdateData(phoneNum, userData);
+                    loadAccount.balance -= 199;
+                    loadAccount.data += 10000;
+                    loadDataProcess.UpdateAccount(loadAccount);
                     return true;
                 }
             }
@@ -153,22 +165,51 @@ namespace Load_BusinessDataLogic
 
         public bool CurrentPinVerification(string pin)
         {
-            return loadDataProcess.CurrentPinChecker(pin);
+            var loadAccounts = loadDataProcess.GetAccounts();
+
+            foreach (var account in loadAccounts)
+            {
+                if (account.pin == pin)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public bool ChangeName(string phoneNumber, string newName)
+        public void ChangeName(string phoneNumber, string pin, string newName)
         {
-            return loadDataProcess.ChangeName(phoneNumber, newName);
+            var loadAccount = GetLoadAccount(phoneNumber, pin);
+            loadAccount.name = newName;
+            loadDataProcess.UpdateAccount(loadAccount);
         }
 
-        public bool ChangePIN(string phoneNumber, string newPIN)
+        public void ChangePIN(string phoneNumber, string pin, string newPIN)
         {
-            return loadDataProcess.ChangePin(phoneNumber, newPIN);
+            var loadAccount = GetLoadAccount(phoneNumber, pin);
+            loadAccount.pin = newPIN;
+            loadDataProcess.UpdateAccount(loadAccount);
         }
 
         public void AddToHistory(LoadAccount user, string bought)
         {
-            loadDataProcess.AddHistory(user, bought);
+            user.history.Add(bought);
+            loadDataProcess.UpdateAccount(user);
+        }
+
+        private LoadAccount GetLoadAccount(string phoneNumber, string PIN)
+        {
+            var loadAccount = loadDataProcess.GetAccounts();
+            LoadAccount foundAccount = null;
+
+            foreach (var account in loadAccount)
+            {
+                if (account.phoneNumber == phoneNumber && account.pin == PIN)
+                {
+                    foundAccount = account;
+                }
+            }
+            return foundAccount;
         }
     }
 }
