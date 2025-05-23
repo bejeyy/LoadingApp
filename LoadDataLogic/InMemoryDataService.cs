@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LoadDataLogic
 {
-    public class InMemoryDataService //: ILoadDataProcess
+    public class InMemoryDataService : ILoadDataProcess
     {
 
         List<LoadAccount> accounts = new List<LoadAccount>();
@@ -16,17 +16,16 @@ namespace LoadDataLogic
             return accounts;
         }
 
-        public bool RegisterAccount(LoadAccount loadAccount)
+        public void RegisterAccount(LoadAccount loadAccount)
         {
             foreach (var user in accounts)
             {
                 if (user.phoneNumber == loadAccount.phoneNumber)
                 {
-                    return false;
+                    return;
                 }
             }
             accounts.Add(loadAccount);
-            return true;
         }
 
         private int FindAccountIndex(LoadAccount loadAccount)

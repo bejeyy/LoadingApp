@@ -20,10 +20,15 @@ namespace LoadCommon
             phoneNumber = userPhoneNumber;
             name = userName;
             pin = userPIN;
-            balance = 0;
-            data = 0;
+            balance = 0.0;
+            data = 0.0;
             history = new List<string>();
 
+        }
+
+        public LoadAccount()
+        {
+            history = new List<string>();
         }
     }
 }

@@ -69,8 +69,18 @@ namespace ConsoleApp1
 
             } while (!LoadProcess.NumberConfirmation(phoneNumber) || LoadProcess.PhoneNumberExist(phoneNumber));
 
-            Console.Write("Enter Name: ");
-            string userName = Console.ReadLine();
+            string userName;
+            do
+            {
+                Console.Write("Enter Name: ");
+                userName = Console.ReadLine();
+
+                if(string.IsNullOrEmpty(userName))
+                {
+                    Console.WriteLine("ERROR: Enter a Name.\n");
+                }
+
+            } while (string.IsNullOrEmpty(userName));
 
             string PIN;
             do
