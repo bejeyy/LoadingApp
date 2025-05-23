@@ -13,11 +13,11 @@ namespace Load_BusinessDataLogic
     {
         LoadDataProcess loadDataProcess = new LoadDataProcess();
 
-        public static List<string> historyList = new List<string>();
 
-        public bool AddUserAccount(string phoneNum, string userName, string userPin)
+        public void AddUserAccount(string phoneNum, string userName, string userPin)
         {
-            return loadDataProcess.RegisterAccount(phoneNum, userName, userPin);
+            LoadAccount newUser = new LoadAccount(phoneNum, userName, userPin);
+            loadDataProcess.RegisterAccount(newUser);
         }
 
         public bool AccountVerification(string enteredPhoneNumber, string userPIN)

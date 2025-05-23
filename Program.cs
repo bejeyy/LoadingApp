@@ -95,7 +95,7 @@ namespace ConsoleApp1
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("LOG IN ACCOUNT\n");
-            
+
             do
             {
                 Console.Write("Enter your phone number: ");
@@ -409,14 +409,16 @@ namespace ConsoleApp1
                         LoadProcess.ChangePIN(phoneNumber, pin, newPIN);
                         Console.WriteLine("PIN updated successfully.");
                         return;
-                    } else
+                    }
+                    else
                     {
                         Console.WriteLine("\nERROR: Enter a valid number PIN with 4-6 digits");
                     }
 
                 } while (true);
 
-            } else
+            }
+            else
             {
                 Console.WriteLine("ERROR: Wrong PIN.");
             }

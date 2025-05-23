@@ -9,8 +9,8 @@ namespace LoadDataLogic
 {
     public interface ILoadDataProcess
     {
-        public List<LoadAccount> GetAccounts();
-        public void RegisterAccount();
+        public List<LoadAccount> GetAllAccounts();
+        public void RegisterAccount(LoadAccount loadAccount);
         public void UpdateAccount(LoadAccount loadAccount);
     }
 }
