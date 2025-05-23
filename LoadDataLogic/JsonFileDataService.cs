@@ -26,6 +26,12 @@ namespace LoadDataLogic
         {
             string jsonText = File.ReadAllText(jsonFilePath);
 
+            if (string.IsNullOrWhiteSpace(jsonText))
+            {
+                loadAccounts = new List<LoadAccount>();
+                return;
+            }
+
             loadAccounts = JsonSerializer.Deserialize<List<LoadAccount>>(jsonText,
         new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<LoadAccount>();
 
