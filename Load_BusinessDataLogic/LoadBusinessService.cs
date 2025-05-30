@@ -13,7 +13,6 @@ namespace Load_BusinessDataLogic
     {
         LoadDataProcess loadDataProcess = new LoadDataProcess();
 
-
         public void AddUserAccount(string phoneNum, string userName, string userPin)
         {
             LoadAccount newUser = new LoadAccount(phoneNum, userName, userPin);
@@ -199,17 +198,16 @@ namespace Load_BusinessDataLogic
 
         private LoadAccount GetLoadAccount(string phoneNumber, string PIN)
         {
-            var loadAccount = loadDataProcess.GetAccounts();
-            LoadAccount foundAccount = null;
+            var loadAccounts = loadDataProcess.GetAccounts();
 
-            foreach (var account in loadAccount)
+            foreach (var account in loadAccounts)
             {
                 if (account.phoneNumber == phoneNumber && account.pin == PIN)
                 {
-                    foundAccount = account;
+                    return account;
                 }
             }
-            return foundAccount;
+            return null;
         }
     }
 }

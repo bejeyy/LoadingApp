@@ -235,6 +235,7 @@ namespace ConsoleApp1
                 else
                 {
                     LoadProcess.UpdateBalance(1, addAmount, phoneNumber, pin);
+                    loggedInUser = LoadProcess.SetUser(phoneNumber, pin);
                     Console.WriteLine($"Your new Balance is: {loggedInUser.balance}");
                     LoadProcess.AddToHistory(loggedInUser, $"CASH IN: You have received {addAmount}.");
                 }
@@ -272,6 +273,7 @@ namespace ConsoleApp1
                 else
                 {
                     LoadProcess.UpdateBalance(2, removeAmount, phoneNumber, pin);
+                    loggedInUser = LoadProcess.SetUser(phoneNumber, pin);
                     Console.WriteLine($"\nSuccessfully sent {removeAmount} to {userNumber}");
                     Console.WriteLine($"Your new Balance is: {loggedInUser.balance}");
                     LoadProcess.AddToHistory(loggedInUser, $"SEND CASH: You have sent {removeAmount} to {userNumber}.");
@@ -335,6 +337,7 @@ namespace ConsoleApp1
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Your Balance:");
+            loggedInUser = LoadProcess.SetUser(phoneNumber, pin);
             Console.WriteLine($"\nBalance: P{loggedInUser.balance}");
             Console.WriteLine($"Data: {loggedInUser.data}mb");
         }
@@ -390,6 +393,7 @@ namespace ConsoleApp1
                 if (!string.IsNullOrEmpty(newName))
                 {
                     LoadProcess.ChangeName(phoneNumber, pin, newName);
+                    loggedInUser = LoadProcess.SetUser(phoneNumber, pin);
                     Console.WriteLine("Name updated sucessfully.");
                     return;
                 }
@@ -417,6 +421,8 @@ namespace ConsoleApp1
                     if (LoadProcess.IsValidPin(newPIN))
                     {
                         LoadProcess.ChangePIN(phoneNumber, pin, newPIN);
+                        pin = newPIN;
+                        loggedInUser = LoadProcess.SetUser(phoneNumber, pin);
                         Console.WriteLine("PIN updated successfully.");
                         return;
                     }
@@ -496,6 +502,9 @@ namespace ConsoleApp1
                         LoadProcess.AddToHistory(loggedInUser, "SMART: You have bought GigaChad199 (12000mb)");
                         break;
                 }
+                loggedInUser = LoadProcess.SetUser(phoneNumber, pin);
+                Console.WriteLine($"\nUpdated Balance: P{loggedInUser.balance}");
+                Console.WriteLine($"Updated Data: {loggedInUser.data}mb");
             }
             else
             {
@@ -565,6 +574,9 @@ namespace ConsoleApp1
                         LoadProcess.AddToHistory(loggedInUser, "GLOBE: You have bought GoSURF199 (12000mb)");
                         break;
                 }
+                loggedInUser = LoadProcess.SetUser(phoneNumber, pin);
+                Console.WriteLine($"\nUpdated Balance: P{loggedInUser.balance}");
+                Console.WriteLine($"Updated Data: {loggedInUser.data}mb");
             }
             else
             {
@@ -634,6 +646,9 @@ namespace ConsoleApp1
                         LoadProcess.AddToHistory(loggedInUser, "GOMO: You have bought GomuGomuNo199(12000mb)");
                         break;
                 }
+                loggedInUser = LoadProcess.SetUser(phoneNumber, pin);
+                Console.WriteLine($"\nUpdated Balance: P{loggedInUser.balance}");
+                Console.WriteLine($"Updated Data: {loggedInUser.data}mb");
             }
             else
             {
@@ -703,6 +718,9 @@ namespace ConsoleApp1
                         LoadProcess.AddToHistory(loggedInUser, "DITO: You have bought Level199(12000mb)");
                         break;
                 }
+                loggedInUser = LoadProcess.SetUser(phoneNumber, pin);
+                Console.WriteLine($"\nUpdated Balance: P{loggedInUser.balance}");
+                Console.WriteLine($"Updated Data: {loggedInUser.data}mb");
             }
             else
             {
