@@ -19,6 +19,7 @@ namespace LoadDataLogic
 
         static SqlConnection sqlConnection;
 
+        List<LoadAccount> loadAccounts = new List<LoadAccount>();
         public DBDataService()
         {
             sqlConnection = new SqlConnection(connectionString);
@@ -33,21 +34,20 @@ namespace LoadDataLogic
 
             SqlDataReader reader = selectCommand.ExecuteReader();
 
-            var loadAccounts = new List<LoadAccount>();
-
             while (reader.Read())
             {
-
-                LoadAccount loadAccount = new LoadAccount();
-                loadAccount.phoneNumber = reader["PhoneNumber"].ToString();
-                loadAccount.name = reader["Name"].ToString();
-                loadAccount.pin = reader["PIN"].ToString();
-                loadAccount.balance = Convert.ToDouble(reader["Balance"]);
-                loadAccount.data = Convert.ToDouble(reader["Data"]);
                 string history = reader["History"].ToString();
-                loadAccount.history = JsonSerializer.Deserialize<List<string>>(history) ?? new List<string>();
 
-                loadAccounts.Add(loadAccount);
+                loadAccounts.Add(new LoadAccount()
+                {
+                    phoneNumber = reader["PhoneNumber"].ToString(),
+                    name = reader["Name"].ToString(),
+                    pin = reader["PIN"].ToString(),
+                    balance = Convert.ToDouble(reader["Balance"]),
+                    data = Convert.ToDouble(reader["Data"]),
+                    history = JsonSerializer.Deserialize<List<string>>(history) ?? new List<string>()
+
+                });
             }
 
             sqlConnection.Close();
