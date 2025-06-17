@@ -95,7 +95,6 @@ namespace LoadDataLogic
             updateCommand.ExecuteNonQuery();
 
             sqlConnection.Close();
-
         }
     }
 }

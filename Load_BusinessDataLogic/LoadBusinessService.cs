@@ -195,6 +195,11 @@ namespace Load_BusinessDataLogic
             user.history.Add(bought);
             loadDataProcess.UpdateAccount(user);
         }
+        public void ClearHistory(LoadAccount user)
+        {
+            user.history.Clear();
+            loadDataProcess.UpdateAccount(user);
+        }
 
         private LoadAccount GetLoadAccount(string phoneNumber, string PIN)
         {

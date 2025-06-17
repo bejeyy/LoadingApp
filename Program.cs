@@ -350,6 +350,26 @@ namespace ConsoleApp1
             {
                 Console.WriteLine(boughtHistory);
             }
+
+            Console.WriteLine("\n-------------------------------------------");
+            Console.WriteLine("\n1) Clear History");
+            Console.WriteLine("0) Back");
+
+            int action = GetUserInput();
+
+            switch (action)
+            {
+                case 1:
+                    LoadProcess.ClearHistory(loggedInUser);
+                    Console.WriteLine("History cleared successfully");
+                    break;
+                case 0:
+                    break;
+                default:
+                    Console.WriteLine("ERROR: Invalid Input");
+                    break;
+            }
+
         }
 
         static void ShowProfile()
