@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="LoadBusinessLogic">
+      <HintPath>..\ConsoleApp1\Load_BusinessDataLogic\bin\Debug\net8.0\LoadBusinessLogic.dll</HintPath>
+    </Reference>
+    <Reference Include="LoadCommon">
+      <HintPath>..\ConsoleApp1\Load_BusinessDataLogic\bin\Debug\net8.0\LoadCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="LoadDataLogic">
+      <HintPath>..\ConsoleApp1\Load_BusinessDataLogic\bin\Debug\net8.0\LoadDataLogic.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
