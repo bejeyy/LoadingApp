@@ -13,9 +13,9 @@ namespace LoadDataLogic
         public LoadDataProcess()
         {
             //loadDataProcess = new TextFileDataService();
-            loadDataProcess = new InMemoryDataService();
+            //loadDataProcess = new InMemoryDataService();
             //loadDataProcess = new JsonFileDataService();
-            //loadDataProcess = new DBDataService();
+            loadDataProcess = new DBDataService();
         }
 
         public void RegisterAccount(LoadAccount newUser)
