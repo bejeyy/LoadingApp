@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LoadAppGUI
 {
@@ -37,7 +36,7 @@ namespace LoadAppGUI
         private void cbNetworks_SelectedIndexChanged(object sender, EventArgs e)
         {
             lbOffers.Items.Clear();
-
+            
             string selectedNetwork = cbNetworks.SelectedItem.ToString();
             string[] promos = null;
 
@@ -75,7 +74,7 @@ namespace LoadAppGUI
 
             if (string.IsNullOrEmpty(network) || selectedIndex < 0)
             {
-                MessageBox.Show("Please select a network and a promo.");
+                MessageBox.Show("ERROR: Please select a network and a promo.", "Invalid Selection");
                 return;
             }
 
@@ -116,7 +115,6 @@ namespace LoadAppGUI
                 businessService.AddToHistory(AccountData.LoggedInUser, historyText);
 
                 MessageBox.Show($"Purchase successful!\n{boughtPromo} ({boughtData})\n\nBalance: ₱{AccountData.LoggedInUser.balance}\nData: {AccountData.LoggedInUser.data}mb", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtNumber.Clear();
             }
             else
             {

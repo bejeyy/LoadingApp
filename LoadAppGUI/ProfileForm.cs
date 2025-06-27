@@ -53,7 +53,7 @@ namespace LoadAppGUI
 
                 if (String.IsNullOrEmpty(newName))
                 {
-                    MessageBox.Show("ERROR: Input a name.", "Input a Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("ERROR: Input a name.", "Invalid name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
