@@ -8,14 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="LoadAppGUI\**" />
     <Compile Remove="LoadCommon\**" />
     <Compile Remove="LoadDataLogic\**" />
     <Compile Remove="Load_BusinessDataLogic\**" />
     <Compile Remove="WebApplication2\**" />
+    <EmbeddedResource Remove="LoadAppGUI\**" />
     <EmbeddedResource Remove="LoadCommon\**" />
     <EmbeddedResource Remove="LoadDataLogic\**" />
     <EmbeddedResource Remove="Load_BusinessDataLogic\**" />
     <EmbeddedResource Remove="WebApplication2\**" />
+    <None Remove="LoadAppGUI\**" />
     <None Remove="LoadCommon\**" />
     <None Remove="LoadDataLogic\**" />
     <None Remove="Load_BusinessDataLogic\**" />
